@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Página de Inicio - Tienda SK</title>
-  <link rel="stylesheet" href="css/styles.css">
+  <title>Página de Inicio - Mari Shop</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
   <style>
     /* Estilos adicionales */
     body {
@@ -12,6 +12,9 @@
       flex-direction: column;
       min-height: 100vh;
       margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: #f5f5f5;
+      color: #333;
     }
 
     .main-container {
@@ -22,7 +25,7 @@
 
     main {
       flex: 1;
-      padding-bottom: 20px; /* Espacio para que el contenido no toque el footer */
+      padding-bottom: 20px;
     }
 
     .product-image {
@@ -34,106 +37,82 @@
 
     .product-card {
       background-color: #fff;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
       overflow: hidden;
-      transition: transform 0.3s ease;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
     }
 
     .product-card:hover {
-      transform: translateY(-5px);
+      transform: translateY(-10px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     }
 
     footer {
-      background-color: #333;
+      background-color: #222;
       color: #fff;
-      padding: 10px;
+      padding: 15px;
       text-align: center;
       margin-top: 20px;
-      flex-shrink: 0; /* Evita que el footer se encoja */
+      flex-shrink: 0;
     }
 
-    /* Center the search bar */
+    /* Estilo para centrar la barra de búsqueda */
     .search-container {
       display: flex;
       justify-content: center;
       margin-bottom: 20px;
     }
 
-    /* Estilo para la barra de búsqueda */
     #searchBar {
       width: 100%;
-      max-width: 500px; /* Limit the maximum width */
-      padding: 10px;
+      max-width: 600px;
+      padding: 12px;
       font-size: 1rem;
-      border: 1px solid #ddd;
-      border-radius: 5px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      transition: border-color 0.3s ease;
     }
 
-    /* Media query para hacer la barra de búsqueda más pequeña en teléfonos */
-    @media (max-width: 600px) {
-      #searchBar {
-        width: 80%; /* Hacer la barra de búsqueda más pequeña */
-        padding: 8px; /* Reducir el padding */
-        font-size: 0.875rem; /* Tamaño de fuente más pequeño */
-      }
+    #searchBar:focus {
+      border-color: #6c63ff;
+      outline: none;
     }
 
-    /* Estilo para el contenedor de filtros */
-    .filter-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
+    /* Estilo de "Filtrar por" */
+    .filter-container label {
+      font-weight: bold;
+      font-size: 1.1rem;
+      color: #4a4a4a;
+      margin-bottom: 10px;
+      display: inline-block;
     }
 
-    /* Media query para cambiar el diseño del filtro en teléfonos y tabletas */
-    @media (max-width: 768px) {
-      .filter-container {
-        flex-direction: column; /* Cambiar a columna */
-        align-items: center; /* Centrar los elementos */
-      }
-
-      .filter-container label {
-        margin-bottom: 8px; /* Espacio debajo del texto "Filtrar por" */
-        text-align: center; /* Centrar el texto */
-      }
-
-      .filter-container select {
-        width: 70%; /* Hacer el botón de filtro más pequeño */
-        padding: 8px; /* Ajustar el padding para que coincida con el tamaño */
-        font-size: 0.875rem; /* Ajustar el tamaño de la fuente */
-      }
-    }
-
-    /* Centrar la paginación en todas las pantallas */
-    #pagination {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-top: 20px;
-    }
-
-    #pagination button {
+    /* Estilo para el botón de filtrado */
+    #filter {
       padding: 10px;
-      margin: 0 5px;
-      border-radius: 5px;
-      background-color: #f0f0f0;
-      border: 1px solid #ddd;
-      cursor: pointer;
+      border-radius: 8px;
+      border: 2px solid #ddd;
+      transition: border-color 0.3s ease;
+      background-color: #6c63ff;
+      color: white;
     }
 
-    #pagination button:hover {
-      background-color: #e0e0e0;
+    #filter:focus {
+      border-color: #6c63ff;
+      outline: none;
     }
 
-    #pageNumbers {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    /* Animación suave para el botón de filtro */
+    #filter {
+      transition: all 0.3s ease;
     }
 
-    /* Responsive Hamburger Menu */
+    #filter:hover {
+      background-color: #5348cc;
+    }
+
+    /* Menú hamburguesa */
     .hamburger {
       display: none;
       flex-direction: column;
@@ -141,73 +120,116 @@
       width: 30px;
       height: 20px;
       cursor: pointer;
+      transition: transform 0.3s ease;
     }
+
+    .hamburger:hover {
+      transform: rotate(90deg);
+    }
+
     .hamburger span {
       height: 3px;
-      background: white;
+      background: #fff;
       border-radius: 5px;
     }
 
+    /* Menú móvil */
     .mobile-menu {
       display: none;
       position: absolute;
-      top: 60px;
+      top: 80px;
       right: 20px;
-      background-color: #3b82f6;
-      padding: 10px;
-      border-radius: 5px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      background-color: #6c63ff;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
       z-index: 1000;
-    }
-    .mobile-menu a {
-      color: white;
-      display: block;
-      padding: 10px;
-      text-decoration: none;
-      border-bottom: 1px solid #2a69ac;
-    }
-    .mobile-menu a:last-child {
-      border-bottom: none;
-    }
-    .mobile-menu a:hover {
-      background-color: #2563eb;
+      transition: opacity 0.5s ease;
     }
 
-    /* Media Query for Tablets and Phones */
+    .mobile-menu.active {
+      display: block;
+      opacity: 1;
+    }
+
+    .mobile-menu a {
+      color: #fff;
+      display: block;
+      padding: 12px;
+      text-decoration: none;
+      border-bottom: 1px solid #5348cc;
+    }
+
+    .mobile-menu a:hover {
+      background-color: #5348cc;
+    }
+
+    /* Ajustes responsive para pantallas pequeñas */
     @media (max-width: 768px) {
       .hamburger {
         display: flex;
       }
+
       nav {
         display: none;
       }
+
       .mobile-menu {
-        display: none; /* Initially hidden */
+        display: none;
       }
+
       .mobile-menu.active {
-        display: block; /* Show when active */
+        display: block;
+      }
+
+      .filter-container {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      label {
+        text-align: center;
+      }
+
+      #filter {
+        width: 80%;
+        margin-top: 8px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      header {
+        height: 100px;
+      }
+
+      .mobile-menu {
+        top: 100px;
+      }
+
+      .search-container {
+        margin-top: 20px;
       }
     }
   </style>
 </head>
-<body class="bg-gray-100 text-gray-900">
+<body>
   <div class="main-container">
     <!-- Header -->
-    <header class="bg-blue-600 text-white p-4 relative">
+    <header class="bg-gradient-to-r from-purple-700 via-indigo-600 to-purple-500 text-white p-6 relative">
       <div class="container mx-auto flex justify-between items-center">
-        <h1 class="text-2xl font-bold">Tinda SK</h1>
+        <h1 class="text-3xl font-bold">MariShop</h1>
         <div class="hamburger" id="hamburgerMenu">
           <span></span>
           <span></span>
           <span></span>
         </div>
-        <nav id="userNav">
+        <nav id="userNav" class="hidden md:flex space-x-4">
           <!-- Links will be dynamically inserted here -->
         </nav>
       </div>
       <!-- Mobile Menu -->
       <div class="mobile-menu" id="mobileMenu">
-        <!-- Links will be dynamically inserted here -->
+        <!-- Links will be dynamically inserted aquí -->
       </div>
     </header>
 
@@ -215,11 +237,11 @@
     <main class="container mx-auto py-8">
       <!-- Barra de Búsqueda -->
       <div class="search-container">
-        <input type="text" id="searchBar" placeholder="Buscar productos..." class="px-4 py-2 border rounded-md">
+        <input type="text" id="searchBar" placeholder="Buscar productos..." class="px-4 py-2 border rounded-md w-full max-w-lg">
       </div>
 
       <!-- Opciones de Filtrado -->
-      <div class="filter-container">
+      <div class="filter-container flex justify-between items-center my-6">
         <label for="filter">Filtrar por:</label>
         <select id="filter" class="px-4 py-2 border rounded-md">
           <option value="all">Todos</option>
@@ -241,11 +263,11 @@
 
       <!-- Paginación -->
       <div id="pagination" class="flex justify-center items-center mt-6">
-        <button id="prevPage" class="px-4 py-2 border rounded-md mx-2">Anterior</button>
+        <button id="prevPage" class="px-4 py-2 border rounded-md mx-2 bg-purple-600 text-white hover:bg-purple-500">Anterior</button>
         <div id="pageNumbers" class="flex">
           <!-- Números de página serán insertados aquí mediante JavaScript -->
         </div>
-        <button id="nextPage" class="px-4 py-2 border rounded-md mx-2">Siguiente</button>
+        <button id="nextPage" class="px-4 py-2 border rounded-md mx-2 bg-purple-600 text-white hover:bg-purple-500">Siguiente</button>
       </div>
     </main>
 
@@ -294,7 +316,6 @@
           `;
         }
 
-        // Add event listeners for logout buttons
         const logoutBtn = document.getElementById('logoutBtn');
         const logoutBtnMobile = document.getElementById('logoutBtnMobile');
 
@@ -312,12 +333,10 @@
         window.location.href = 'index.html';
       }
 
-      // Toggle mobile menu visibility
       hamburgerMenu.addEventListener('click', () => {
         mobileMenu.classList.toggle('active');
       });
 
-      // Initially render the menu
       renderMenu();
     });
   </script>
