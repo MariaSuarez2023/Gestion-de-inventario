@@ -28,22 +28,25 @@ document.addEventListener('DOMContentLoaded', () => {
   // Toggle sidebar visibility on mobile
   hamburgerMenu.addEventListener('click', () => {
     sidebar.classList.toggle('active');
+    hamburgerMenu.classList.toggle('active');
   });
 
   // Toggle secondary menu visibility
   secondaryHamburgerMenu.addEventListener('click', () => {
-    secondaryMenu.style.display = secondaryMenu.style.display === 'block' ? 'none' : 'block';
+    secondaryMenu.classList.toggle('active');
   });
 
   // Close sidebar when the close button is clicked
   closeSidebar.addEventListener('click', () => {
     sidebar.classList.remove('active');
+    hamburgerMenu.classList.remove('active');
   });
 
   // Close sidebar when a menu item is clicked (for mobile)
   [menuGeneral, menuInventario, menuConfig].forEach(menuItem => {
     menuItem.addEventListener('click', () => {
       sidebar.classList.remove('active');
+      hamburgerMenu.classList.remove('active');
     });
   });
 
@@ -69,22 +72,41 @@ document.addEventListener('DOMContentLoaded', () => {
   // Function to load General Content
   function loadGeneralContent() {
     dashboardContent.innerHTML = `
-      <h2 class="text-2xl font-bold text-gray-800 mb-4" style="margin-top: 24px;">Estadísticas Generales</h2>
+      <div class="dashboard-header">
+        <h2>Estadísticas Generales</h2>
+      </div>
       <div class="stats-grid">
         <div class="stat-item">
-          <h3>Total de Productos Publicados</h3>
-          <p id="totalProducts">Cargando...</p>
+          <div class="stat-icon">
+            <i class="fas fa-boxes"></i>
+          </div>
+          <div class="stat-info">
+            <h3>Total de Productos</h3>
+            <p id="totalProducts">Cargando...</p>
+          </div>
         </div>
         <div class="stat-item">
-          <h3>Total de Productos Vendidos</h3>
-          <p id="totalSold">Cargando...</p>
+          <div class="stat-icon">
+            <i class="fas fa-shopping-cart"></i>
+          </div>
+          <div class="stat-info">
+            <h3>Productos Vendidos</h3>
+            <p id="totalSold">Cargando...</p>
+          </div>
         </div>
         <div class="stat-item">
-          <h3>Total de Compradores</h3>
-          <p id="totalBuyers">Cargando...</p>
+          <div class="stat-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="stat-info">
+            <h3>Compradores</h3>
+            <p id="totalBuyers">Cargando...</p>
+          </div>
         </div>
       </div>
-      <h2 class="text-2xl font-bold text-gray-800 mb-4" style="margin-top: 24px;">Historial de Ventas</h2>
+      <div class="dashboard-header">
+        <h2>Historial de Ventas</h2>
+      </div>
       <div class="table-container">
         <table class="responsive-table">
           <thead>
@@ -162,118 +184,107 @@ document.addEventListener('DOMContentLoaded', () => {
     salesTableBody.innerHTML = '';
 
     sales.forEach(sale => {
-        const tr = document.createElement('tr');
-        const imageUrl = sale.product.image ? `http://localhost:3000/uploads/${sale.product.image}` : '/images/no-image.png';
+      const tr = document.createElement('tr');
+      const imageUrl = sale.product.image ? `http://localhost:3000/uploads/${sale.product.image}` : '/images/no-image.png';
 
-        tr.innerHTML = `
-            <td><img src="${imageUrl}" alt="${sale.product.name}" style="width: 50px; height: 50px; object-fit: contain;"></td>
-            <td>${sale.product.name}</td>
-            <td>$${sale.product.price}</td>
-            <td>${sale.buyer.name}</td>
-            <td>${sale.buyer.email}</td>
-            <td>${sale.quantity}</td>
-        `;
-        salesTableBody.appendChild(tr);
+      tr.innerHTML = `
+        <td><img src="${imageUrl}" alt="${sale.product.name}" style="width: 50px; height: 50px; object-fit: contain;"></td>
+        <td>${sale.product.name}</td>
+        <td>$${sale.product.price}</td>
+        <td>${sale.buyer.name}</td>
+        <td>${sale.buyer.email}</td>
+        <td>${sale.quantity}</td>
+      `;
+      salesTableBody.appendChild(tr);
     });
 
     renderPaginationControls(totalPages, currentPage);
-}
+  }
 
-// Función para renderizar los controles de paginación
-// Función para renderizar los controles de paginación
-function renderPaginationControls(totalPages, currentPage) {
-  const paginationControls = document.getElementById('paginationControls');
-  paginationControls.innerHTML = '';
-  paginationControls.style.display = 'flex';
-  paginationControls.style.justifyContent = 'center';
-  paginationControls.style.marginTop = '20px';
+  // Función para renderizar los controles de paginación
+  function renderPaginationControls(totalPages, currentPage) {
+    const paginationControls = document.getElementById('paginationControls');
+    paginationControls.innerHTML = '';
+    paginationControls.style.display = 'flex';
+    paginationControls.style.justifyContent = 'center';
+    paginationControls.style.marginTop = '20px';
 
-  const createButton = (text, disabled, onClick) => {
+    const createButton = (text, disabled, onClick) => {
       const button = document.createElement('button');
       button.textContent = text;
       button.classList.add('page-button');
       button.disabled = disabled;
-      button.style.padding = '10px 15px';
-      button.style.margin = '0 5px';
-      button.style.border = '1px solid #ddd';
-      button.style.borderRadius = '5px';
-      button.style.backgroundColor = disabled ? '#f0f0f0' : '#1d4ed8';
-      button.style.color = disabled ? '#999' : '#fff';
-      button.style.cursor = disabled ? 'not-allowed' : 'pointer';
       button.addEventListener('click', onClick);
       return button;
-  };
+    };
 
-  // Botón Anterior
-  const prevButton = createButton('Anterior', currentPage === 1, () => {
+    // Botón Anterior
+    const prevButton = createButton('Anterior', currentPage === 1, () => {
       if (currentPage > 1) {
-          fetchSales(currentPage - 1);
+        fetchSales(currentPage - 1);
       }
-  });
-  paginationControls.appendChild(prevButton);
+    });
+    paginationControls.appendChild(prevButton);
 
-  // Botones de página
-  for (let i = 1; i <= totalPages; i++) {
+    // Botones de página
+    for (let i = 1; i <= totalPages; i++) {
       const button = createButton(i, false, () => fetchSales(i));
       if (i === currentPage) {
-          button.style.backgroundColor = '#3b82f6';
-          button.style.color = '#ffffff';
+        button.classList.add('active');
       }
       paginationControls.appendChild(button);
+    }
+
+    // Botón Siguiente
+    const nextButton = createButton('Siguiente', currentPage === totalPages, () => {
+      if (currentPage < totalPages) {
+        fetchSales(currentPage + 1);
+      }
+    });
+    paginationControls.appendChild(nextButton);
   }
 
-  // Botón Siguiente
-  const nextButton = createButton('Siguiente', currentPage === totalPages, () => {
-      if (currentPage < totalPages) {
-          fetchSales(currentPage + 1);
-      }
-  });
-  paginationControls.appendChild(nextButton);
-}
-
-
-// Función para cargar el contenido del inventario
-function loadInventarioContent() {
+  // Función para cargar el contenido del inventario
+  function loadInventarioContent() {
     dashboardContent.innerHTML = `
-        <h2 class="text-2xl font-bold text-gray-800 mb-4" style="margin-top: 24px;">Inventario de Productos</h2>
-        <button id="addProductBtn" class="hover:bg-green-600 text-black px-4 py-2 rounded mb-4" style="background-color: #00b4d8; margin-top: 24px;">Agregar Producto</button>
-
-        <div id="successMessage" class="text-green-500 font-bold mb-4 hidden" style="margin-top:24px;"></div>
-
-        <div class="table-container">
-            <table class="responsive-table">
-                <thead>
-                    <tr>
-                        <th>Imagen</th>
-                        <th>Nombre</th>
-                        <th>Precio</th>
-                        <th>Descripción</th>
-                        <th>Categoría</th>
-                        <th>Cantidad</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody id="productsTableBody">
-                    <!-- Productos se cargarán aquí -->
-                </tbody>
-            </table>
-        </div>
-        <p id="noProductsMessage" class="text-gray-600 mt-4 hidden">Todavía no se ha agregado ningún producto.</p>
+      <div class="dashboard-header">
+        <h2>Inventario de Productos</h2>
+        <button id="addProductBtn" class="add-product-btn">Agregar Producto</button>
+      </div>
+      <div id="successMessage" class="success-message hidden"></div>
+      <div class="table-container">
+        <table class="responsive-table">
+          <thead>
+            <tr>
+              <th>Imagen</th>
+              <th>Nombre</th>
+              <th>Precio</th>
+              <th>Descripción</th>
+              <th>Categoría</th>
+              <th>Cantidad</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="productsTableBody">
+            <!-- Productos se cargarán aquí -->
+          </tbody>
+        </table>
+      </div>
+      <p id="noProductsMessage" class="no-products-message hidden">Todavía no se ha agregado ningún producto.</p>
     `;
     fetchProducts(); // Cargar los productos del vendedor autenticado desde la base de datos
 
     document.getElementById('addProductBtn').addEventListener('click', () => {
-        showProductForm();
+      showProductForm();
     });
-}
-
+  }
 
   // Function to show the product form
   function showProductForm(product = {}) {
     let existingForm = document.getElementById('productForm');
     if (existingForm) {
-        existingForm.style.display = 'block';
-        return;
+      existingForm.style.display = 'block';
+      return;
     }
 
     const overlay = document.createElement('div');
@@ -284,44 +295,44 @@ function loadInventarioContent() {
     formContainer.id = 'productForm';
     formContainer.classList.add('popup-form', 'active');
     formContainer.innerHTML = `
-        <div class="form-container">
-            <h2 class="text-xl font-bold mb-4">${product._id ? 'Editar Producto' : 'Agregar Producto'}</h2>
-            <form id="addProductForm" class="space-y-4 responsive-form">
-                <div class="form-control">
-                    <label for="productName" class="block text-sm font-medium text-gray-700">Nombre del Producto</label>
-                    <input type="text" id="productName" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required value="${product.name || ''}">
-                </div>
-                <div class="form-control">
-                    <label for="productPrice" class="block text-sm font-medium text-gray-700">Precio</label>
-                    <input type="number" id="productPrice" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required value="${product.price || ''}">
-                </div>
-                <div class="form-control">
-                    <label for="productDescription" class="block text-sm font-medium text-gray-700">Descripción</label>
-                    <textarea id="productDescription" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>${product.description || ''}</textarea>
-                </div>
-                <div class="form-control">
-                    <label for="productCategory" class="block text-sm font-medium text-gray-700">Categoría</label>
-                    <select id="productCategory" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
-                        <option value="">Seleccione una categoría</option>
-                        <option value="Electrodomésticos" ${product.category === 'Electrodomésticos' ? 'selected' : ''}>Electrodomésticos</option>
-                        <option value="Tecnología" ${product.category === 'Tecnología' ? 'selected' : ''}>Tecnología</option>
-                        <option value="Supermercado" ${product.category === 'Supermercado' ? 'selected' : ''}>Supermercado</option>
-                    </select>
-                </div>
-                <div class="form-control">
-                    <label for="productQuantity" class="block text-sm font-medium text-gray-700">Cantidad</label>
-                    <input type="number" id="productQuantity" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required value="${product.quantity || 1}">
-                </div>
-                <div class="form-control">
-                    <label for="productImage" class="block text-sm font-medium text-gray-700">Imagen del Producto</label>
-                    <input type="file" id="productImage" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                </div>
-                <div class="form-actions flex justify-end space-x-4">
-                    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">${product._id ? 'Actualizar' : 'Guardar'}</button>
-                    <button type="button" class="cancel-btn bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">Cancelar</button>
-                </div>
-            </form>
-        </div>
+      <div class="form-container">
+        <h2>${product._id ? 'Editar Producto' : 'Agregar Producto'}</h2>
+        <form id="addProductForm" class="responsive-form">
+          <div class="form-control">
+            <label for="productName">Nombre del Producto</label>
+            <input type="text" id="productName" required value="${product.name || ''}">
+          </div>
+          <div class="form-control">
+            <label for="productPrice">Precio</label>
+            <input type="number" id="productPrice" required value="${product.price || ''}">
+          </div>
+          <div class="form-control">
+            <label for="productDescription">Descripción</label>
+            <textarea id="productDescription" required>${product.description || ''}</textarea>
+          </div>
+          <div class="form-control">
+            <label for="productCategory">Categoría</label>
+            <select id="productCategory" required>
+              <option value="">Seleccione una categoría</option>
+              <option value="Electrodomésticos" ${product.category === 'Electrodomésticos' ? 'selected' : ''}>Electrodomésticos</option>
+              <option value="Tecnología" ${product.category === 'Tecnología' ? 'selected' : ''}>Tecnología</option>
+              <option value="Supermercado" ${product.category === 'Supermercado' ? 'selected' : ''}>Supermercado</option>
+            </select>
+          </div>
+          <div class="form-control">
+            <label for="productQuantity">Cantidad</label>
+            <input type="number" id="productQuantity" required value="${product.quantity || 1}">
+          </div>
+          <div class="form-control">
+            <label for="productImage">Imagen del Producto</label>
+            <input type="file" id="productImage">
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">${product._id ? 'Actualizar' : 'Guardar'}</button>
+            <button type="button" class="btn-secondary cancel-btn">Cancelar</button>
+          </div>
+        </form>
+      </div>
     `;
 
     dashboardContent.appendChild(formContainer);
@@ -329,9 +340,9 @@ function loadInventarioContent() {
 
     document.getElementById('addProductForm').addEventListener('submit', (e) => handleProductFormSubmit(e, product._id));
     document.querySelector('.cancel-btn').addEventListener('click', () => {
-        formContainer.remove();
-        overlay.remove();
-        document.body.classList.remove('form-open');
+      formContainer.remove();
+      overlay.remove();
+      document.body.classList.remove('form-open');
     });
   }
 
@@ -348,7 +359,7 @@ function loadInventarioContent() {
 
     const imageFile = document.getElementById('productImage').files[0];
     if (imageFile) {
-        formData.append('image', imageFile);
+      formData.append('image', imageFile);
     }
 
     try {
@@ -420,7 +431,7 @@ function loadInventarioContent() {
     productsTableBody.innerHTML = ''; // Clear table
 
     if (products.length === 0) {
-      noProductsMessage.classList.remove('hidden'); 
+      noProductsMessage.classList.remove('hidden');
       noProductsMessage.style.display = 'block';
     } else {
       noProductsMessage.classList.add('hidden');
@@ -437,10 +448,10 @@ function loadInventarioContent() {
           <td>$${product.price}</td>
           <td>${product.description}</td>
           <td>${product.category}</td>
-          <td>${product.quantity}</td>  <!-- Mostrar cantidad -->
+          <td>${product.quantity}</td>
           <td class="table-actions">
-            <button class="edit-btn bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Editar</button>
-            <button class="delete-btn bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">Eliminar</button>
+            <button class="edit-btn"><i class="fas fa-edit"></i></button>
+            <button class="delete-btn"><i class="fas fa-trash-alt"></i></button>
           </td>
         `;
 
@@ -468,23 +479,51 @@ function loadInventarioContent() {
           fetchProducts(); // Reload products after deletion
         } else {
           console.error('Error deleting product:', response.status);
-          alert('Error deleting product.');
+          alert('Error eliminando el producto.');
         }
       } catch (error) {
         console.error('Error deleting product:', error);
-        alert('Error deleting product: ' + error.message);
+        alert('Error eliminando el producto: ' + error.message);
       }
     }
   }
 
   // Handle user update
+  function loadConfigContent() {
+    dashboardContent.innerHTML = `
+      <div class="dashboard-header">
+        <h2>Configuración de Usuario</h2>
+      </div>
+      <div class="config-container">
+        <form id="editUserForm" class="responsive-form">
+          <div class="form-control">
+            <label for="name">Nombre</label>
+            <input type="text" id="name" required value="${user.name}">
+          </div>
+          <div class="form-control">
+            <label for="email">Correo Electrónico</label>
+            <input type="email" id="email" required value="${user.email}">
+          </div>
+          <div class="form-control">
+            <label for="password">Contraseña</label>
+            <input type="password" id="password" placeholder="Dejar en blanco para mantener la actual">
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">Actualizar</button>
+          </div>
+        </form>
+      </div>
+    `;
+
+    document.getElementById('editUserForm').addEventListener('submit', handleUserUpdate);
+  }
+
   async function handleUserUpdate(event) {
     event.preventDefault();
     const editUserForm = event.target;
     const name = editUserForm.name.value;
     const email = editUserForm.email.value;
     const password = editUserForm.password.value;
-    const role = editUserForm.role.value;
 
     if (confirm('¿Seguro que quieres realizar estos cambios?')) {
       try {
@@ -494,13 +533,14 @@ function loadInventarioContent() {
             'Content-Type': 'application/json',
             'x-auth-token': localStorage.getItem('token')
           },
-          body: JSON.stringify({ name, email, password, role })
+          body: JSON.stringify({ name, email, password })
         });
 
         if (response.ok) {
           const data = await response.json();
           localStorage.setItem('user', JSON.stringify(data.user));
-          window.location.href = 'index.html';
+          alert('Usuario actualizado con éxito.');
+          window.location.reload();
         } else {
           alert('Error al actualizar. Por favor, intenta de nuevo.');
         }
