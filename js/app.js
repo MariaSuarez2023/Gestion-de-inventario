@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const pageNumberButtons = document.querySelectorAll('.page-number');
         pageNumberButtons.forEach((button, index) => {
             if (index + 1 === currentPage) {
-                button.style.backgroundColor = '#1d4ed8';
+                button.style.backgroundColor = '#c8b6ff';
                 button.style.color = '#fff';
             } else {
                 button.style.backgroundColor = '#f0f0f0';

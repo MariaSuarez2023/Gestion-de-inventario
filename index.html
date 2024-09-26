@@ -79,6 +79,15 @@
       outline: none;
     }
 
+    @media (max-width: 600px) {
+      #searchBar {
+        width: 80%; /* Hacer la barra de búsqueda más pequeña */
+        padding: 8px; /* Reducir el padding */
+        font-size: 0.875rem; /* Tamaño de fuente más pequeño */
+      }
+    }
+
+
     /* Estilo de "Filtrar por" */
     .filter-container label {
       font-weight: bold;
@@ -191,10 +200,55 @@
       background-color: #5348cc;
     }
 
+
+    /* Hero Section Styles */
+    .hero {
+      height: 100vh;
+      position: relative;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-align: center;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.7); /* Fondo oscuro semitransparente */
+    }
+
+    /* Animaciones */
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fadeIn {
+      animation: fadeIn 1s ease-in-out;
+    }
+
+
     /* Ajustes responsive para pantallas pequeñas */
     @media (max-width: 768px) {
       .hamburger {
         display: flex;
+      }
+
+      header {
+        position: relative;
+        z-index: 1000;
       }
 
       nav {
@@ -226,8 +280,9 @@
 
     @media (max-width: 640px) {
       header {
-        height: 100px;
-      }
+      position: relative;
+      z-index: 1000;
+    }
 
       .mobile-menu {
         top: 100px;
@@ -262,8 +317,19 @@
       </div>
     </header>
 
+    <!-- Hero Section -->
+    <section class="hero" style="background-image: url('https://images.pexels.com/photos/264507/pexels-photo-264507.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');">
+      <div class="hero-overlay"></div>
+      <div class="z-10 text-center text-white">
+        <h1 class="text-5xl md:text-6xl font-bold mb-4 animate-fadeIn">¡Bienvenido a Mari Shop!</h1>
+        <p class="text-xl md:text-2xl mb-8 animate-fadeIn">Explora nuestra selección de productos exclusivos a precios increíbles.</p>
+        <a href="#productos" class="bg-purple-600 hover:bg-purple-500 text-white font-bold py-4 px-8 rounded-full transition duration-300 animate-fadeIn">Ver Productos</a>
+      </div>
+    </section>
+
     <!-- Main Content -->
     <main class="container mx-auto py-8">
+      <h1 class="text-5xl md:text-4xl font-bold mb-20 mt-20 text-center animate-fadeIn">Todos los Productos</h1>
       <!-- Barra de Búsqueda -->
       <div class="search-container">
         <input type="text" id="searchBar" placeholder="Buscar productos..." class="px-4 py-2 border rounded-md w-full max-w-lg">
@@ -271,6 +337,7 @@
 
       <!-- Opciones de Filtrado -->
       <div class="filter-container flex justify-between items-center my-6">
+  
         <label for="filter">Filtrar por:</label>
         <select id="filter" class="px-4 py-2 border rounded-md">
           <option value="all">Todos</option>
