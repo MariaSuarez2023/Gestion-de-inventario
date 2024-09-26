@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Favoritos - Mari Shop</title>
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
   <style>
     body {
       display: flex;
@@ -12,7 +12,7 @@
       min-height: 100vh;
       margin: 0;
       background-color: #f3f4f6;
-      font-family: Arial, sans-serif;
+      font-family: 'Poppins', sans-serif;
     }
 
     .container {
@@ -33,7 +33,7 @@
       padding: 12px;
       border: 1px solid #ddd;
       text-align: left;
-      vertical-align: middle; 
+      vertical-align: middle;
     }
 
     .favorites-table th {
@@ -51,7 +51,7 @@
     }
 
     .favorites-table td.table-actions {
-      text-align: center; /* Centrar el contenido dentro de la celda */
+      text-align: center;
     }
 
     .table-actions button {
@@ -62,8 +62,8 @@
       border-radius: 4px;
       cursor: pointer;
       transition: background-color 0.3s ease;
-      display: inline-block; /* Asegura que los botones se mantengan en línea */
-      margin: 0 5px; /* Agrega un margen para espaciarlos */
+      display: inline-block;
+      margin: 0 5px;
     }
 
     .table-actions button:hover {
@@ -93,7 +93,7 @@
       flex-shrink: 0;
     }
 
-    /* Responsive Hamburger Menu */
+    /* Menú hamburguesa */
     .hamburger {
       display: none;
       flex-direction: column;
@@ -101,13 +101,43 @@
       width: 30px;
       height: 20px;
       cursor: pointer;
+      transition: transform 0.3s ease;
     }
+
     .hamburger span {
       height: 3px;
       background: white;
       border-radius: 5px;
     }
 
+    /* Animación de subrayado para enlaces del menú */
+    nav a {
+      position: relative;
+      display: inline-block;
+      text-decoration: none;
+      padding-bottom: 4px;
+      transition: color 0.3s ease;
+    }
+
+    nav a::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      transform: scaleX(0);
+      height: 2px;
+      bottom: 0;
+      left: 0;
+      background-color: #fff;
+      transform-origin: bottom right;
+      transition: transform 0.3s ease-out;
+    }
+
+    nav a:hover::after {
+      transform: scaleX(1);
+      transform-origin: bottom left;
+    }
+
+    /* Menú móvil */
     .mobile-menu {
       display: none;
       position: absolute;
@@ -119,6 +149,7 @@
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       z-index: 1000;
     }
+
     .mobile-menu a {
       color: white;
       display: block;
@@ -126,54 +157,61 @@
       text-decoration: none;
       border-bottom: 1px solid #2a69ac;
     }
+
     .mobile-menu a:last-child {
       border-bottom: none;
     }
+
     .mobile-menu a:hover {
       background-color: #2563eb;
     }
 
-    /* Media Query for Tablets and Phones */
+    
+
     @media (max-width: 768px) {
       .hamburger {
         display: flex;
       }
+
       nav {
         display: none;
       }
+
       .mobile-menu {
-        display: none; /* Initially hidden */
+        display: none;
       }
+
       .mobile-menu.active {
-        display: block; /* Show when active */
+        display: block;
       }
     }
-
   </style>
 </head>
 <body>
   <!-- Header con Nav -->
-  <header class="bg-blue-600 text-white p-4 relative">
-    <div class="container mx-auto flex justify-between items-center">
-      <h1 class="text-2xl font-bold">Mari Shop</h1>
-      <div class="hamburger" id="hamburgerMenu">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-      <nav id="userNav">
-        <!-- Links serán insertados aquí dinámicamente -->
-      </nav>
+  <header class="bg-gradient-to-r from-purple-700 via-indigo-600 to-purple-500 text-white p-6 relative w-full">
+    <div class="w-auto flex justify-between items-center">
+         <a href="index.html">
+          <img src="./img/Black and Red Online Store Logo (4).png" alt="MariShop Logo" class="h-32 w-auto">
+        </a>
+        <div class="hamburger" id="hamburgerMenu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <nav id="userNav" class="hidden md:flex space-x-4">
+            <!-- Links serán insertados aquí dinámicamente -->
+        </nav>
     </div>
     <!-- Mobile Menu -->
     <div class="mobile-menu" id="mobileMenu">
-      <!-- Links serán insertados aquí dinámicamente -->
+        <!-- Links serán insertados aquí dinámicamente -->
     </div>
-  </header>
+</header>
 
   <!-- Contenido principal -->
   <div class="container">
-    <h1 style="font-weight: bold; margin-top: 15px; margin-bottom: 15px; font-size: 20px;">Mis Productos Favoritos</h1>
+    <h1 class="font-bold mt-4 mb-4 text-xl">Mis Productos Favoritos</h1>
     <table class="favorites-table">
       <thead>
         <tr>
@@ -230,7 +268,6 @@
           `;
         }
 
-        // Add event listeners for logout buttons
         const logoutBtn = document.getElementById('logoutBtn');
         const logoutBtnMobile = document.getElementById('logoutBtnMobile');
 
@@ -242,18 +279,10 @@
         }
       }
 
-      function handleLogout() {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        window.location.href = 'index.html';
-      }
-
-      // Toggle mobile menu visibility
       hamburgerMenu.addEventListener('click', () => {
         mobileMenu.classList.toggle('active');
       });
 
-      // Initially render the menu
       renderMenu();
     });
   </script>

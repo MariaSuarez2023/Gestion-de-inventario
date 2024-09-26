@@ -112,6 +112,33 @@
       background-color: #5348cc;
     }
 
+    /* Animación de subrayado para los enlaces del menú */
+    nav a {
+      position: relative;
+      display: inline-block;
+      text-decoration: none;
+      padding-bottom: 4px;
+      transition: color 0.3s ease;
+    }
+
+    nav a::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      transform: scaleX(0);
+      height: 2px;
+      bottom: 0;
+      left: 0;
+      background-color: #fff;
+      transform-origin: bottom right;
+      transition: transform 0.3s ease-out;
+    }
+
+    nav a:hover::after {
+      transform: scaleX(1);
+      transform-origin: bottom left;
+    }
+
     /* Menú hamburguesa */
     .hamburger {
       display: none;
@@ -216,8 +243,10 @@
   <div class="main-container">
     <!-- Header -->
     <header class="bg-gradient-to-r from-purple-700 via-indigo-600 to-purple-500 text-white p-6 relative">
-      <div class="container mx-auto flex justify-between items-center">
-        <h1 class="text-3xl font-bold">MariShop</h1>
+      <div class="w-auto flex justify-between items-center">
+        <a href="index.html">
+          <img src="./img/Black and Red Online Store Logo (4).png" alt="MariShop Logo" class="h-32 w-auto">
+        </a>
         <div class="hamburger" id="hamburgerMenu">
           <span></span>
           <span></span>
